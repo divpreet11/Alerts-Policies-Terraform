@@ -39,7 +39,7 @@ resource "newrelic_workflow" "workflow1" {
     type = "FILTER"
 
     predicate {
-      attribute = "labels.policyIds"
+      attribute = "labels.account_id"
       operator = "EXACTLY_MATCHES"
       values = [ "var.policy_id"]
     }
@@ -50,3 +50,26 @@ resource "newrelic_workflow" "workflow1" {
   }
 }
 
+# Muting Rule
+resource "newrelic_alert_muting_rule" "Muting_rule" {
+    name = "Browser Muting Rule"
+    enabled = true
+    description = "muting rule test."
+    condition {
+        conditions {
+            attribute   = "conditionName"
+            operator    = "EQUALS"
+            values      = ["Average Duration"]
+        }
+        
+        operator = "AND"
+    }
+    schedule {
+      start_time = "2024-07-27T12:00:00"
+      end_time = "2024-07-28T16:30:00"
+      time_zone = "America/Los_Angeles"
+      # repeat = "WEEKLY"
+      # weekly_repeat_days = ["MONDAY", "WEDNESDAY", "FRIDAY"]
+      # repeat_count = 42
+    }
+}
